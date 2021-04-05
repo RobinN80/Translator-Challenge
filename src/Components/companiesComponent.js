@@ -21,6 +21,7 @@ class Company extends Component {
     };
   }
 
+
   handleClick = () => {
     this.setState({ showUsers: !this.state.showUsers });
   };
@@ -70,9 +71,13 @@ class Companies extends Component {
   }
 
   async componentDidMount() {
-    const { data: companies } = await axios.get(baseUrl + "companies");
-    this.setState({ companies });
-    console.log({ companies });
+    try{
+        const { data: companies } = await axios.get(baseUrl + "companies");
+        this.setState({ companies });
+        console.log({ companies });
+    } catch (error) {
+        console.log(error);
+    }
   }
 
   render() {
