@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Media } from "reactstrap";
+import { ListGroup, ListGroupItem, Button, Row } from "reactstrap";
 import { baseUrl } from "../shared/baseUrl";
 import axios from "axios";
 
@@ -9,12 +9,16 @@ class Company extends Component {
   }
 
   render() {
+      const {name} = this.props.company;
     return (
-      <Media>
-        <Media body>
-          <Media heading>{this.props.name}</Media>
-        </Media>
-      </Media>
+      <ListGroup horizontal style={{borderWidth: 'thick'}}>
+        <ListGroupItem className="justify-content-between col-8">
+          {name}
+        </ListGroupItem>
+        <Button className="col-3">Users</Button>
+
+      </ListGroup>
+
     );
   }
 }
@@ -30,16 +34,16 @@ class Companies extends Component {
   async componentDidMount() {
     const { data: companies } = await axios.get(baseUrl + "companies");
     this.setState({ companies });
-    console.log({companies});
+    console.log({ companies });
   }
 
   render() {
     return (
       <div>
-        <h2>Companies</h2>
+        <h2>Companies:</h2>
         <div>
           {this.state.companies.map((COMPANY) => {
-            return <Company key={COMPANY.id} name={COMPANY.name} />;
+            return <Company key={COMPANY.id} company={COMPANY} />;
           })}
         </div>
       </div>
