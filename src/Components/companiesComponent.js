@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { ListGroup, ListGroupItem, Button, Row, Collapse } from "reactstrap";
+import {
+  ListGroup,
+  ListGroupItem,
+  Button,
+  Collapse,
+  Modal,
+  ModalBody,
+  ModalHeader
+} from "reactstrap";
 import { baseUrl } from "../shared/baseUrl";
 import Users from "./usersComponent";
 import axios from "axios";
@@ -9,6 +17,7 @@ class Company extends Component {
     super(props);
     this.state = {
       showUsers: false,
+      isModalOpen: false,
     };
   }
 
@@ -16,25 +25,38 @@ class Company extends Component {
     this.setState({ showUsers: !this.state.showUsers });
   };
 
+  toggleModal = () => {
+      this.setState({isModalOpen : !this.state.isModalOpen});
+  }
+
   render() {
-    const { name, users } = this.props.company;
+    const { name, phoneNumber, users } = this.props.company;
 
     return (
-      <ListGroup horizontal style={{ borderWidth: "thick" }}>
-        <ListGroupItem className="justify-content-between col-8">
-          {name}
-          <Collapse isOpen={this.state.showUsers}>
-            <ul>
-              {users.map((USER) => {
-                return <Users key={USER.id} user={USER} />;
-              })}
-            </ul>
-          </Collapse>
-        </ListGroupItem>
-        <Button className="col-3" onClick={this.handleClick}>
-          {this.state.showUsers ? "Hide Users" : "Show Users"}
-        </Button>
-      </ListGroup>
+      <React.Fragment>
+        <ListGroup horizontal style={{ borderWidth: "thick" }}>
+          <ListGroupItem className="justify-content-between col-8">
+            <Button color="warning" onClick={this.toggleModal}>{name}</Button>
+            <Collapse isOpen={this.state.showUsers}>
+              <ul>
+                {users.map((USER) => {
+                  return <Users key={USER.id} user={USER} />;
+                })}
+              </ul>
+            </Collapse>
+          </ListGroupItem>
+          <Button className="col-3" color="primary" onClick={this.handleClick}>
+            {this.state.showUsers ? "Hide Users" : "Show Users"}
+          </Button>
+        </ListGroup>
+         {/*Modal with company contact info*/  }    
+        <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+        <ModalHeader toggle={this.toggleModal}>Contact</ModalHeader>
+        <ModalBody>
+            {`${name} ${phoneNumber}`}
+        </ModalBody>
+      </Modal>
+      </React.Fragment>
     );
   }
 }
