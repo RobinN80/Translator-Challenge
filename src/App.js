@@ -1,5 +1,5 @@
 import React from 'react';
-import Companies from './Components/companiesComponent';
+import Companies from './components/companiesComponent';
 import './App.css';
 
 function App() {
