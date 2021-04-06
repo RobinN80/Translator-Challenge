@@ -6,7 +6,7 @@ import {
   Collapse,
   Modal,
   ModalBody,
-  ModalHeader
+  ModalHeader,
 } from "reactstrap";
 import { baseUrl } from "../shared/baseUrl";
 import Users from "./usersComponent";
@@ -21,14 +21,13 @@ class Company extends Component {
     };
   }
 
-
   handleClick = () => {
     this.setState({ showUsers: !this.state.showUsers });
   };
 
   toggleModal = () => {
-      this.setState({isModalOpen : !this.state.isModalOpen});
-  }
+    this.setState({ isModalOpen: !this.state.isModalOpen });
+  };
 
   render() {
     const { name, phoneNumber, users } = this.props.company;
@@ -37,7 +36,9 @@ class Company extends Component {
       <React.Fragment>
         <ListGroup horizontal style={{ borderWidth: "thick" }}>
           <ListGroupItem className="justify-content-between col-8">
-            <Button color="warning" onClick={this.toggleModal}>{name}</Button>
+            <Button color="warning" onClick={this.toggleModal}>
+              {name}
+            </Button>
             <Collapse isOpen={this.state.showUsers}>
               <ul>
                 {users.map((USER) => {
@@ -50,13 +51,11 @@ class Company extends Component {
             {this.state.showUsers ? "Hide Users" : "Show Users"}
           </Button>
         </ListGroup>
-         {/*Modal with company contact info*/  }    
+        {/*Modal with company contact info*/}
         <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-        <ModalHeader toggle={this.toggleModal}>Contact</ModalHeader>
-        <ModalBody>
-            {`${name} ${phoneNumber}`}
-        </ModalBody>
-      </Modal>
+          <ModalHeader toggle={this.toggleModal}>Contact</ModalHeader>
+          <ModalBody>{`${name} ${phoneNumber}`}</ModalBody>
+        </Modal>
       </React.Fragment>
     );
   }
@@ -71,13 +70,20 @@ class Companies extends Component {
   }
 
   async componentDidMount() {
-    try{
-        const { data: companies } = await axios.get(baseUrl + "companies");
-        this.setState({ companies });
-        console.log({ companies });
+    try {
+      const { data: companies } = await axios.get(baseUrl + "companies");
+      this.setState({ companies });
+      console.log({ companies });
     } catch (error) {
-        console.log(error);
+      if (error.response) {
+        console.log(error.response.data);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("error", error.message);
+      }
     }
+    console.log(error.config);
   }
 
   render() {
